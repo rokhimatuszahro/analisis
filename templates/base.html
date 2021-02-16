@@ -1,0 +1,144 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.min.css' %}">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis Sentimen</title>
+    <style>
+        /* This example part of kwd-dashboard see https://kamona-wd.github.io/kwd-dashboard/ */
+        /* So here we will write some classes to simulate dark mode and some of tailwind css config in our project */
+        :root {
+          --light: #edf2f9;
+          --dark: #152e4d;
+          --darker: #12263f;
+        }
+        
+        .dark .dark\:text-light {
+          color: var(--light);
+        }
+        
+        .dark .dark\:bg-dark {
+          background-color: var(--dark);
+        }
+        
+        .dark .dark\:bg-darker {
+          background-color: var(--darker);
+        }
+        
+        .dark .dark\:text-gray-300 {
+          color: #d1d5db;
+        }
+        
+        .dark .dark\:text-indigo-500 {
+          color: #6366f1;
+        }
+        
+        .dark .dark\:text-indigo-100 {
+          color: #e0e7ff;
+        }
+        
+        .dark .dark\:hover\:text-light:hover {
+            color: var(--light);
+        }
+        
+        .dark .dark\:border-indigo-800 {
+          border-color: #3730a3;
+        }
+        
+        .dark .dark\:border-indigo-700 {
+          border-color: #4338ca;
+        }
+        
+        .dark .dark\:bg-indigo-600 {
+          background-color: #4f46e5;
+        }
+        
+        .dark .dark\:hover\:bg-indigo-600:hover {
+          background-color: #4f46e5;
+        }
+        
+        .dark .dark\:border-indigo-500 {
+          border-color: #6366f1;
+        }
+        
+        .hover\:overflow-y-auto:hover {
+          overflow-y: auto;
+        }
+        
+    </style>
+</head>
+<body>
+
+    {% block content %}
+    {% endblock %}
+    
+
+    <script>
+
+            const setup = () => {
+            const getTheme = () => {
+                if (window.localStorage.getItem('dark')) {
+                return JSON.parse(window.localStorage.getItem('dark'))
+                }
+                return !!window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+            }
+        
+            const setTheme = (value) => {
+                window.localStorage.setItem('dark', value)
+            }
+        
+            return {
+                loading: true,
+                isDark: getTheme(),
+                toggleTheme() {
+                this.isDark = !this.isDark
+                setTheme(this.isDark)
+                },
+                setLightTheme() {
+                this.isDark = false
+                setTheme(this.isDark)
+                },
+                setDarkTheme() {
+                this.isDark = true
+                setTheme(this.isDark)
+                },
+                watchScreen() {
+                if (window.innerWidth <= 1024) {
+                    this.isSidebarOpen = false
+                } else if (window.innerWidth >= 1024) {
+                    this.isSidebarOpen = true
+                }
+                },
+                isSidebarOpen: window.innerWidth >= 1024 ? true : false,
+                toggleSidbarMenu() {
+                this.isSidebarOpen = !this.isSidebarOpen
+                },
+                isNotificationsPanelOpen: false,
+                openNotificationsPanel() {
+                this.isNotificationsPanelOpen = true
+                this.$nextTick(() => {
+                    this.$refs.notificationsPanel.focus()
+                })
+                },
+                isSettingsPanelOpen: false,
+                openSettingsPanel() {
+                this.isSettingsPanelOpen = true
+                this.$nextTick(() => {
+                    this.$refs.settingsPanel.focus()
+                })
+                },
+                isSearchPanelOpen: false,
+                openSearchPanel() {
+                this.isSearchPanelOpen = true
+                this.$nextTick(() => {
+                    this.$refs.searchInput.focus()
+                })
+                },
+            }
+            }
+    </script>
+</body>
+</html>
